@@ -1,0 +1,9 @@
+.DS_Store
+.vscode/
+target/
+allure-results/
+allure-report/
+spark-report/
+test-output/
+*.log
+*.class
