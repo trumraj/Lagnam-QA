@@ -4,7 +4,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.HexFormat;
 
 /**
  * Verifies that an incoming request genuinely came from Slack, per
@@ -41,7 +40,7 @@ public class SlackSignatureVerifier {
             Mac mac = Mac.getInstance(HMAC_ALGO);
             mac.init(new SecretKeySpec(signingSecret.getBytes(StandardCharsets.UTF_8), HMAC_ALGO));
             byte[] hash = mac.doFinal(baseString.getBytes(StandardCharsets.UTF_8));
-            String computedSignature = "v0=" + HexFormat.of().formatHex(hash);
+            String computedSignature = "v0=" + toHex(hash);
 
             return MessageDigest.isEqual(
                     computedSignature.getBytes(StandardCharsets.UTF_8),
@@ -49,5 +48,13 @@ public class SlackSignatureVerifier {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private String toHex(byte[] bytes) {
+        StringBuilder hex = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            hex.append(String.format("%02x", b));
+        }
+        return hex.toString();
     }
 }
