@@ -18,7 +18,10 @@ permissions:
 jobs:
   test:
     name: Run Playwright/Cucumber suite
-    runs-on: ubuntu-latest
+    # Pinned (not ubuntu-latest): Playwright Java 1.45.0's "install --with-deps"
+    # only recognizes the Ubuntu codenames that existed when it was released,
+    # so it fails outright on newer ubuntu-latest images.
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
 
     env:
